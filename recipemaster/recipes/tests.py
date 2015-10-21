@@ -140,3 +140,15 @@ class AddUserToCollectionTest(CreateUserMixin, TestCase):
         )
         self.assertContains(response, 'Add user to')
         self.assertContains(response, '<form method="post">')
+
+    def test_add_user_should_add_the_user(self):
+        collection = RecipeCollection.objects.create(title='super collection')
+        collection.users.add(self.user)
+        User.objects.create_user(
+            username='myuser', email='myuser@…', password='top_secret')
+        response = self.client.post(
+            reverse('recipes:add_user_to_collection', args=[collection.pk]),
+            {'username': 'myuser'}
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(collection.users.filter(username='myuser').exists())
