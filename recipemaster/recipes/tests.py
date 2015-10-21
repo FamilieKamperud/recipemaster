@@ -128,3 +128,15 @@ class EditRecipeInCollectionTest(CreateUserMixin, TestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(collection.recipes.last().title, 'Toast')
+
+
+class AddUserToCollectionTest(CreateUserMixin, TestCase):
+
+    def test_add_user_should_render_form(self):
+        collection = RecipeCollection.objects.create(title='super collection')
+        collection.users.add(self.user)
+        response = self.client.get(
+            reverse('recipes:add_user_to_collection', args=[collection.pk])
+        )
+        self.assertContains(response, 'Add user to')
+        self.assertContains(response, '<form method="post">')
