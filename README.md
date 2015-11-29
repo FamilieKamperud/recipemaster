@@ -3,3 +3,6 @@
 Recipemaster is a django project that allows the users to collect and store their favorite recipes.
 
 
+## Install dependencies
+
+pip install -r requirements.txt
